@@ -1,0 +1,9 @@
+[package]
+name = "qnx-hello-world"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+axum = "*"
+tokio = { version = "1.0", features = ["full"] }
