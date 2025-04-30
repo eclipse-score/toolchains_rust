@@ -1,0 +1,13 @@
+{
+	"name": "qnx-rust-container-qnx710",
+	"image": "qnx-rust-container-qnx710:latest",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"BarbossHack.crates-io",
+				"tamasfe.even-better-toml",
+				"rust-lang.rust-analyzer"
+			]
+		}
+	}
+}

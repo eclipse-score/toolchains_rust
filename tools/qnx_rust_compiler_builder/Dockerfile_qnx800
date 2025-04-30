@@ -1,0 +1,99 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+
+# ubuntu 24.04 LTS is pretty common, so let's start with that
+FROM ubuntu:noble
+
+# No license file parameter for qnx800 as the license file is supposed
+# to be part of the .qnx directory
+
+# !!! pitfall !!!
+# you must set HOST_ARCH build parameter to either x86_64 on x86 hosts (regular x86 linux machines, regualar x86 windows machines with docker desktop, x86 mac with docker desktop)
+# or aarch64 on apple silicon or ARM windows systems with docker desktop (does this exist?) or native linux aarch64 systems
+ARG HOST_ARCH
+ENV HOST_ARCH=${HOST_ARCH}
+
+
+# install compilers and some dependencies for rust, also add libc6-amd64-cross for aarch64 (does not hurt on x86_64)
+# and link it so it is available for use in rosetta on apple silicon macs.
+# install qemu-user-binfmt for use on non-MAC aarch64 linux systems, so it uses qemu instead to run x86_64
+# QNX linker/compiler!
+RUN apt-get update && \
+    apt-get -y install build-essential git python3 bash curl pkg-config libssl-dev libc6-amd64-cross qemu-user-binfmt && \
+    ln -s /usr/x86_64-linux-gnu/lib64/ /lib64 && \
+    useradd -ms /bin/bash builder && chown -R builder /usr/local
+
+# rosetta was a bit picky about the library path .. so the symlink to /lib64 might look like overdoing it, but
+# this seems to be a necessity!
+ENV LD_LIBRARY_PATH="/lib64:/usr/x86_64-linux-gnu/lib"
+
+USER builder
+
+# add the QNX SDP to the container
+ADD qnx800 /home/builder/qnx800
+
+# and your settings
+ADD .qnx /home/builder/.qnx
+
+WORKDIR /home/builder
+
+# use a version tag - be careful when updating, configuration like the config.toml might change!
+RUN git clone https://github.com/rust-lang/rust.git -b 1.86.0 --depth 1
+
+WORKDIR /home/builder/rust
+
+# add simple config file that ensures that extended tools like cargo are build
+COPY rust_build_config.toml /home/builder/rust/config.toml
+
+# build all targets that are possibly supported on QNX 7.1
+ENV build_env="\
+    CC_aarch64-unknown-nto-qnx800=qcc \
+    CFLAGS_aarch64-unknown-nto-qnx800=-Vgcc_ntoaarch64le_cxx \
+    CXX_aarch64-unknown-nto-qnx800=qcc \
+    AR_aarch64_unknown_nto_qnx800=ntoaarch64-ar \
+    CC_x86_64-pc-nto-qnx800=qcc \
+    CFLAGS_x86_64-pc-nto-qnx800=-Vgcc_ntox86_64_cxx \
+    CXX_x86_64-pc-nto-qnx800=qcc \
+    AR_x86_64_pc_nto_qnx800=ntox86_64-ar \
+    "
+
+# this should be the architecture of this container, so it can build binaries that it can run
+ENV NATIVE_TARGET="${HOST_ARCH}-unknown-linux-gnu"
+
+# qnxsdp-env requires bash O_o (or so the qnxsdp-env script claims)
+RUN ["/bin/bash", "-c", ". ~/qnx800/qnxsdp-env.sh && env $build_env     ./x.py build         --target aarch64-unknown-nto-qnx800,x86_64-pc-nto-qnx800,${NATIVE_TARGET}         rustc library/core library/alloc library/std library"]
+
+USER root
+# ugly hack to allow builder to install into etc ...
+RUN chown -R builder /etc || true
+USER builder
+
+# install
+RUN ["/bin/bash", "-c", ". ~/qnx800/qnxsdp-env.sh && env $build_env     ./x.py install       --target aarch64-unknown-nto-qnx800,x86_64-pc-nto-qnx800,${NATIVE_TARGET}"]
+
+
+WORKDIR /home/builder
+
+# source the qnxsdp environment so qcc is available
+RUN . ./qnx800/qnxsdp-env.sh
+
+# to build your cargo projects for qnx use the following targets:
+
+# cargo build --target aarch64-unknown-nto-qnx800
+# or for the x86_64 qemu vm (or native? x86_64 targets?) ${NATIVE_TARGET} 
+# cargo build --target x86_64-pc-nto-qnx800
+# when building to run within the container, for example unit tests or just compiling to check for sanity / compile issues,
+# use the ${NATIVE_TARGET}, which is probably x86_64-unknown-linux-gnu on x86 or aarch64-unknown-linux-gnu on Apple Silicon or
+# the rare usecase, where you actually have an aarch64 native linux
+
