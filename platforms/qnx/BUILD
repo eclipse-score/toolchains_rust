@@ -10,17 +10,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(
-    name = "score_toolchains_rust",
-    version = "0.1",
-    compatibility_level = 0,
-)
-
-bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "platforms", version = "0.0.10")
-
-# Pull in rules_rust so that we can define rust.toolchain(...) in defs.bzl
-bazel_dep(
-  name    = "rules_rust",
-  version = "0.61.0",
+constraint_setting(name = "os")
+constraint_value(
+    name = "os_qnx",
+    constraint_setting = ":os",
 )
