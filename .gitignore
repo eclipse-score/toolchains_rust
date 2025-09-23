@@ -14,3 +14,4 @@
 # Bazel
 MODULE.bazel.lock
 bazel-*
+qnx8/

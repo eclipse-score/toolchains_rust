@@ -16,4 +16,15 @@ module(
     compatibility_level = 0,
 )
 
+bazel_dep(name = "rules_rust", version = "0.56.0")
 bazel_dep(name = "platforms", version = "0.0.11")
+
+bazel_dep(name = "rust_qnx8_toolchain", version = "1.0.0")
+archive_override(
+    module_name = "rust_qnx8_toolchain",
+    urls = [
+        "https://github.com/qorix-group/rust-lang-qnx8/releases/download/1.0.0/qnx8_rust_toolchain.tar.gz",
+    ],
+    strip_prefix = "qnx8",
+    integrity = "sha256-225b5fbbf53ebbf8c2d3ee676c0359d96342317f17a8aee519ac0db3f41cb27e",
+)
