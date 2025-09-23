@@ -41,6 +41,7 @@ platform(
     constraint_values = [
         "@platforms//cpu:aarch64",
         ":qnx8_0",
+        "@platforms//os:qnx",  
     ],
 )
 

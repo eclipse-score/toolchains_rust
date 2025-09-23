@@ -15,36 +15,61 @@
 
 load("@rules_rust//rust:toolchain.bzl", "rust_toolchain")
 
+# ---- platform constraints (define once) ----
+constraint_setting(name = "os")
+constraint_value(
+    name = "qnx8_0",
+    constraint_setting = ":os",
+)
+
+# You can also define a platform if you like:
+platform(
+    name = "aarch64_qnx8_0_platform",
+    constraint_values = [
+        "@platforms//cpu:aarch64",
+        ":qnx8_0",
+    ],
+)
+
+# ---- toolchain ----
 rust_toolchain(
     name = "rust_toolchain_aarch64_qnx8_0",
-    binary_ext = "",  
-    cargo = "@qnx_rust//:cargo",           # <- CHANGE to your QNX toolchain cargo wrapper
-    clippy_driver = "@qnx_rust//:clippy_driver",  # <- CHANGE if available
-    default_edition = "2021",
-    dylib_ext = ".so",                     # QNX uses .so for shared libs
-    env = {},
-    exec_triple = "aarch64-unknown-linux-gnu",  # <-- Only used if running build actions on target; usually set to the build/host
-    extra_exec_rustc_flags = [],
-    extra_rustc_flags = [],
-    rust_doc = "@qnx_rust//:rustdoc",      # <- CHANGE to QNX-compatible rustdoc (if available)
-    rust_std = "@qnx_rust//:rust_std-aarch64-unknown-qnx8_0",  # <- Custom build of std for QNX ARM64
-    rustc = "@qnx_rust//:rustc",           # <- Cross-compiled rustc for QNX
-    rustc_lib = "@qnx_rust//:rustc_lib",   # <- CHANGE to your QNX rustc_lib (if needed)
+
+    # host tools from the external repo produced by the tarball
+    rustc         = "@rust_qnx8_toolchain//:rustc",
+    cargo         = "@rust_qnx8_toolchain//:cargo",
+    rust_doc       = "@rust_qnx8_toolchain//:rustdoc",        
+    clippy_driver = "@rust_qnx8_toolchain//:clippy_driver",
+    rust_std      = "@rust_qnx8_toolchain//:rust_std-aarch64-unknown-qnx8_0",
+
+    # libs needed by rustc on host
+    rustc_lib     = "@rust_qnx8_toolchain//:rustc_lib",
+
+    # triples / extensions
+    target_triple = "aarch64-unknown-nto-qnx800",
+    exec_triple   = "x86_64-unknown-linux-gnu",
     staticlib_ext = ".a",
+    dylib_ext     = ".so",
+    binary_ext    = "",
+
+    default_edition = "2021",
+
     stdlib_linkflags = [],
+    extra_rustc_flags = [],
+    extra_exec_rustc_flags = [],
     tags = ["manual"],
-    target_triple = "aarch64-unknown-qnx8_0",
 )
 
 toolchain(
     name = "toolchain_aarch64_qnx8_0",
+    toolchain_type = "@rules_rust//rust:toolchain_type",
+    toolchain = ":rust_toolchain_aarch64_qnx8_0",
     exec_compatible_with = [
-        "@platforms//cpu:x86_64",  # Usually the build machine (host), not QNX!
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
     ],
     target_compatible_with = [
         "@platforms//cpu:aarch64",
-        ":qnx8_0",                 # This matches our custom QNX constraint value!
+         "//platforms:qnx8_0",
     ],
-    toolchain = ":rust_toolchain_aarch64_qnx8_0",
-    toolchain_type = "@rules_rust//rust:toolchain_type",
 )
