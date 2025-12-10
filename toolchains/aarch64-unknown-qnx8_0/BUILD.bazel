@@ -15,22 +15,6 @@
 
 load("@rules_rust//rust:toolchain.bzl", "rust_toolchain")
 
-# ---- platform constraints (define once) ----
-constraint_setting(name = "os")
-constraint_value(
-    name = "qnx8_0",
-    constraint_setting = ":os",
-)
-
-# You can also define a platform if you like:
-platform(
-    name = "aarch64_qnx8_0_platform",
-    constraint_values = [
-        "@platforms//cpu:aarch64",
-        ":qnx8_0",
-    ],
-)
-
 # ---- toolchain ----
 rust_toolchain(
     name = "rust_toolchain_aarch64_qnx8_0",
@@ -69,7 +53,8 @@ toolchain(
         "@platforms//os:linux",
     ],
     target_compatible_with = [
-        "@platforms//cpu:aarch64",
-         "//platforms:qnx8_0",
+        "@platforms//cpu:arm64",
+        "@platforms//os:qnx",
+        "@score_bazel_platforms//:qnx8_0"
     ],
 )
