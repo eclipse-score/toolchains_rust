@@ -5,14 +5,12 @@ Supports cross-compilation for Linux (x86_64, aarch64) and QNX (aarch64) targets
 
 ## Features
 
-- Bazel platforms for Linux and QNX
 - Rust toolchain definitions for cross-compilation
 - Extension for sysroot management
 - Integration with `rules_rust` and `toolchains_llvm`
 
 ## Repository Structure
 
-- `platforms/` — Bazel platform definitions (Linux, QNX)
 - `toolchains/` — Rust toolchain definitions for each platform
 - `extensions/` — Starlark extensions for sysroot/toolchain registration
 - `MODULE.bazel` — Bazel module metadata
