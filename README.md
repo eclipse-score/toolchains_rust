@@ -1,86 +1,70 @@
 # toolchains_rust
 
-Reusable Bazel module for Rust toolchains, platform definitions, and sysroot management.  
-Supports cross-compilation for Linux (x86_64, aarch64) and QNX (aarch64) targets (not ready )
+Bazel module that packages prebuilt Ferrocene Rust toolchains and a helper
+extension to wrap custom Ferrocene archives.
 
-## Features
+## What’s inside
 
-- Bazel platforms for Linux and QNX
-- Rust toolchain definitions for cross-compilation
-- Extension for sysroot management
-- Integration with `rules_rust` and `toolchains_llvm`
+- `MODULE.bazel`: pins Ferrocene 1.0.0-pre archives and depends on `score_bazel_platforms`.
+- `extensions/ferrocene_toolchain_ext.bzl`: bzlmod extension to wrap arbitrary Ferrocene archives.
+- `toolchains/ferrocene/BUILD.bazel`: aliases to the preconfigured toolchains declared in `MODULE.bazel`.
 
-## Repository Structure
+> Note: This module no longer ships platform definitions or the old rust sysroot
+> extension. Consumers must provide `rules_rust` themselves.
 
-- `platforms/` — Bazel platform definitions (Linux, QNX)
-- `toolchains/` — Rust toolchain definitions for each platform
-- `extensions/` — Starlark extensions for sysroot/toolchain registration
-- `MODULE.bazel` — Bazel module metadata
-
-## How to Use in Consumer Repositories
-
-Add this module and configure extensions in your `MODULE.bazel`:
+## Using the preconfigured Ferrocene toolchains (recommended)
 
 ```python
-bazel_dep(name = "score_toolchains_rust", version = "0.1")
+bazel_dep(name = "rules_rust", version = "0.56.0")  # or your pinned version
+bazel_dep(name = "score_toolchains_rust", version = "0.2.0", dev_dependency = True)
 
-# Bring in the extension
-rust_ext = use_extension("@score_toolchains_rust//extensions:rust_toolchain_ext.bzl", "rust_toolchain_ext")
-
-# Tell it which sysroots to download:
-rust_ext.sysroot(
-    name = "sysroot_linux_x64",
-    url = "https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/4f611ec025be98214164d4bf9fbe8843f58533f7/debian_bullseye_amd64_sysroot.tar.xz",
-    sha256 = "5df5be9357b425cdd70d92d4697d07e7d55d7a923f037c22dc80a78e85842d2c",
-    strip_prefix = "",
-    build_file = "@score_toolchains_rust//sysroot:BUILD.bazel",
+register_toolchains(
+    "@score_toolchains_rust//toolchains/ferrocene:all",
+    dev_dependency = True,
 )
-rust_ext.sysroot(
-    name = "sysroot_linux_aarch64",
-    url = "https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/906cc7c6bf47d4bd969a3221fc0602c6b3153caa/debian_bullseye_arm64_sysroot.tar.xz",
-    sha256 = "d303cf3faf7804c9dd24c9b6b167d0345d41d7fe4bfb7d34add3ab342f6a236c",
-    strip_prefix = "",
-    build_file = "@score_toolchains_rust//sysroot:BUILD.bazel",
-)
-
-use_repo(rust_ext, "sysroot_linux_x64")
-use_repo(rust_ext, "sysroot_linux_aarch64")
-
-# User must also configure rules_rust and toolchains_llvm extensions directly:
-bazel_dep(name = "rules_rust", version = "0.61.0")
-bazel_dep(name = "toolchains_llvm", version = "1.2.0")
-
-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(
-    name = "llvm_toolchain",
-    llvm_versions = { "": "19.1.0" },
-    stdlib = { "linux-x86_64": "stdc++", "linux-aarch64": "stdc++" },
-)
-llvm.sysroot(name="llvm_toolchain", label="@sysroot_linux_x64//:sysroot", targets=["linux-x86_64"])
-llvm.sysroot(name="llvm_toolchain", label="@sysroot_linux_aarch64//:sysroot", targets=["linux-aarch64"])
-use_repo(llvm, "llvm_toolchain")
-
-rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
-rust.toolchain(
-    edition = "2021",
-    extra_target_triples = ["x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu"],
-    versions = ["1.83.0"],
-)
-use_repo(rust, "rust_toolchains")
-register_toolchains("@rust_toolchains//:all")
-register_toolchains("@llvm_toolchain//:all")
 ```
 
-## Example: Cross-Compiling from a Consumer Repository
+## Wrapping your own Ferrocene archives
 
-To build a Rust binary for a specific platform (e.g., aarch64-unknown-linux-gnu), use:
+```python
+bazel_dep(name = "rules_rust", version = "0.56.0")
+bazel_dep(name = "score_toolchains_rust", version = "0.2.0")
 
-```sh
-bazel build //src/rust/rust_kvs_tool:kvs_tool --platforms=@score_toolchains_rust//platforms:aarch64-unknown-linux-gnu
+ferrocene = use_extension(
+    "@score_toolchains_rust//extensions:ferrocene_toolchain_ext.bzl",
+    "ferrocene_toolchain_ext",
+)
+
+ferrocene.toolchain(
+    name = "ferrocene_x86_64_unknown_linux_gnu",
+    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.0-pre/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    sha256 = "31f71ce24f357afcb04fb4d1bab046ed595455849b4e4dcf60fcca2eab02e0a9",
+    target_triple = "x86_64-unknown-linux-gnu",
+    exec_triple = "x86_64-unknown-linux-gnu",
+)
+
+use_repo(ferrocene, "ferrocene_x86_64_unknown_linux_gnu")
+register_toolchains("@ferrocene_x86_64_unknown_linux_gnu//:rust_ferrocene_toolchain")
 ```
 
-Replace the target with your own Bazel target as needed.
+Add more `ferrocene.toolchain(...)` entries for other archives such as
+`aarch64-unknown-linux-gnu`, `aarch64-unknown-nto-qnx800`, or
+`x86_64-pc-nto-qnx800`. For QNX targets, pass the needed environment variables
+(`QNX_HOST`, `QNX_TARGET`, `PATH`, etc.) to match your SDK layout.
 
+Ferrocene `1.0.0-pre` artifacts:
+
+Base URL:
+`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.0-pre/`
+
+| File | sha256 |
+| --- | --- |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `1333d212ddc7718f9a42ec360e5c1a53d5fdc0984ca32d8ffc11ebb4542a69a2` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `35137bac58f795ea55ab7dd05c3e8534ea6a7f995b475a7798898cd9247e99f0` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-ferrocene.subset.tar.gz` | `e7ade5d375e0f0dfe7715db038a170fa5a4249e46fb7bc445c84b7ea76761e31` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `31f71ce24f357afcb04fb4d1bab046ed595455849b4e4dcf60fcca2eab02e0a9` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-ferrocene.subset.tar.gz` | `ec6cac9b1d5cfb4569c05c4168cbf5cc61a5e14a8c0bfe39c2c6c2aa9462771e` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `292be24f2330a134f763ef1f8f820455aeff15ba5b4683553d97f83c98561be8` |
 
 ---
 
