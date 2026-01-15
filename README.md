@@ -5,7 +5,7 @@ extension to wrap custom Ferrocene archives.
 
 ## What’s inside
 
-- `MODULE.bazel`: pins Ferrocene 1.0.0-pre archives and depends on `score_bazel_platforms`.
+- `MODULE.bazel`: pins Ferrocene 1.0.1 archives and depends on `score_bazel_platforms`.
 - `extensions/ferrocene_toolchain_ext.bzl`: bzlmod extension to wrap arbitrary Ferrocene archives.
 - `toolchains/ferrocene/BUILD.bazel`: aliases to the preconfigured toolchains declared in `MODULE.bazel`.
 
@@ -16,7 +16,7 @@ extension to wrap custom Ferrocene archives.
 
 ```python
 bazel_dep(name = "rules_rust", version = "0.56.0")  # or your pinned version
-bazel_dep(name = "score_toolchains_rust", version = "0.2.0", dev_dependency = True)
+bazel_dep(name = "score_toolchains_rust", version = "0.3.0", dev_dependency = True)
 
 register_toolchains(
     "@score_toolchains_rust//toolchains/ferrocene:all",
@@ -28,7 +28,7 @@ register_toolchains(
 
 ```python
 bazel_dep(name = "rules_rust", version = "0.56.0")
-bazel_dep(name = "score_toolchains_rust", version = "0.2.0")
+bazel_dep(name = "score_toolchains_rust", version = "0.3.0")
 
 ferrocene = use_extension(
     "@score_toolchains_rust//extensions:ferrocene_toolchain_ext.bzl",
@@ -37,8 +37,8 @@ ferrocene = use_extension(
 
 ferrocene.toolchain(
     name = "ferrocene_x86_64_unknown_linux_gnu",
-    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.0-pre/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-    sha256 = "31f71ce24f357afcb04fb4d1bab046ed595455849b4e4dcf60fcca2eab02e0a9",
+    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.1/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    sha256 = "4c08b41eaafd39cff66333ca4d4646a5331c780050b8b9a8447353fcd301dddc",
     target_triple = "x86_64-unknown-linux-gnu",
     exec_triple = "x86_64-unknown-linux-gnu",
 )
@@ -52,19 +52,19 @@ Add more `ferrocene.toolchain(...)` entries for other archives such as
 `x86_64-pc-nto-qnx800`. For QNX targets, pass the needed environment variables
 (`QNX_HOST`, `QNX_TARGET`, `PATH`, etc.) to match your SDK layout.
 
-Ferrocene `1.0.0-pre` artifacts:
+Ferrocene `1.0.1` artifacts:
 
 Base URL:
-`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.0-pre/`
+`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.1/`
 
 | File | sha256 |
 | --- | --- |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `1333d212ddc7718f9a42ec360e5c1a53d5fdc0984ca32d8ffc11ebb4542a69a2` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `35137bac58f795ea55ab7dd05c3e8534ea6a7f995b475a7798898cd9247e99f0` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-ferrocene.subset.tar.gz` | `e7ade5d375e0f0dfe7715db038a170fa5a4249e46fb7bc445c84b7ea76761e31` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `31f71ce24f357afcb04fb4d1bab046ed595455849b4e4dcf60fcca2eab02e0a9` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-ferrocene.subset.tar.gz` | `ec6cac9b1d5cfb4569c05c4168cbf5cc61a5e14a8c0bfe39c2c6c2aa9462771e` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `292be24f2330a134f763ef1f8f820455aeff15ba5b4683553d97f83c98561be8` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `563a2438324ee1c6fdcfd13fbe352bedf1cf3f0756d07bb7ba7bdca334df92bf` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `b1f1eb1146bf595fe1f4a65d5793b7039b37d2cb6d395d1c3100fa7d0377b6c9` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-ferrocene.subset.tar.gz` | `ddbdb8e47f56bbd8b4ddad02e4ec58c270242e9ecd43a9efb44a1099bc5afd58` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `4c08b41eaafd39cff66333ca4d4646a5331c780050b8b9a8447353fcd301dddc` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-ferrocene.subset.tar.gz` | `e4dbaab02bfdf2f0f3b008ce14d7770c54bc3cea69fd3bb45778b4a3d36d0fa0` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `6daabbe20c0b06551335f83c2490326ce447759628dea04cd1c90d297c3a0bd3` |
 
 ---
 
