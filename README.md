@@ -7,6 +7,7 @@ extension to wrap custom Ferrocene archives.
 
 - `MODULE.bazel`: pins Ferrocene 1.0.1 archives and depends on `score_bazel_platforms`.
 - `extensions/ferrocene_toolchain_ext.bzl`: bzlmod extension to wrap arbitrary Ferrocene archives.
+- Optional Ferrocene Rust coverage tools (`symbol-report`, `blanket`) when configured.
 - `toolchains/ferrocene/BUILD.bazel`: aliases to the preconfigured toolchains declared in `MODULE.bazel`.
 
 > Note: This module no longer ships platform definitions or the old rust sysroot
@@ -24,6 +25,13 @@ register_toolchains(
 )
 ```
 
+Coverage tools are available from the generated repositories (wrappers set `LD_LIBRARY_PATH` automatically):
+
+```
+bazel run @score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu_symbol-report -- --help
+bazel run @score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu_blanket -- --help
+```
+
 ## Wrapping your own Ferrocene archives
 
 ```python
@@ -39,6 +47,8 @@ ferrocene.toolchain(
     name = "ferrocene_x86_64_unknown_linux_gnu",
     url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.1/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     sha256 = "4c08b41eaafd39cff66333ca4d4646a5331c780050b8b9a8447353fcd301dddc",
+    coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.0.1/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    coverage_tools_sha256 = "06298b2f809a99c4a649c24763add29243e33865e8561683dd8f52724c4b9e18",
     target_triple = "x86_64-unknown-linux-gnu",
     exec_triple = "x86_64-unknown-linux-gnu",
 )
@@ -65,6 +75,7 @@ Base URL:
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `4c08b41eaafd39cff66333ca4d4646a5331c780050b8b9a8447353fcd301dddc` |
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-ferrocene.subset.tar.gz` | `e4dbaab02bfdf2f0f3b008ce14d7770c54bc3cea69fd3bb45778b4a3d36d0fa0` |
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `6daabbe20c0b06551335f83c2490326ce447759628dea04cd1c90d297c3a0bd3` |
+| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `06298b2f809a99c4a649c24763add29243e33865e8561683dd8f52724c4b9e18` |
 
 ---
 
