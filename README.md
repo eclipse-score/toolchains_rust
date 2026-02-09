@@ -25,6 +25,12 @@ register_toolchains(
 )
 ```
 
+Preconfigured toolchains:
+- `ferrocene_x86_64_unknown_linux_gnu`
+- `ferrocene_aarch64_unknown_linux_gnu`
+- `ferrocene_x86_64_pc_nto_qnx800`
+- `ferrocene_aarch64_unknown_nto_qnx800`
+
 Coverage tools are available from the generated repositories (wrappers set `LD_LIBRARY_PATH` automatically):
 
 ```

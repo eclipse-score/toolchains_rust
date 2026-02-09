@@ -32,6 +32,21 @@ alias(
 )
 
 alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:rust_ferrocene_toolchain",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu_symbol-report",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:symbol-report-wrapper",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu_blanket",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:blanket-wrapper",
+)
+
+alias(
     name = "ferrocene_x86_64_pc_nto_qnx800",
     actual = "@ferrocene_x86_64_pc_nto_qnx800//:rust_ferrocene_toolchain",
 )
