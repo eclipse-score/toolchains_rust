@@ -353,7 +353,7 @@
     "//extensions:ferrocene_toolchain_ext.bzl%ferrocene_toolchain_ext": {
       "general": {
         "bzlTransitiveDigest": "XEgifqjEEdSGw80RccoJ/aUy9smsRXQJ9jO4RDOf2vk=",
-        "usagesDigest": "U9PRT4umlibzbq0XVJsVmfbQ5XENdwkBfClWLcdbGgg=",
+        "usagesDigest": "SPIpw645eZYTyNC1pTVM8axfqADrepH4y/Y/rrMa5nQ=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "ferrocene_x86_64_unknown_linux_gnu": {
