@@ -19,11 +19,13 @@ This extension wraps a prebuilt Ferrocene archive (e.g. produced by
 
 Optionally, the same repository can include the Ferrocene Rust coverage tools
 (`symbol-report` and `blanket`) with wrapper scripts that set `LD_LIBRARY_PATH`
-for the embedded `rustc_private` shared libraries.
+for the embedded `rustc_private` shared libraries. It can also expose a Miri
+toolchain backed by a prebuilt Miri sysroot archive.
 """
 
 _BUILD_TMPL = """\\
-load("@rules_rust//rust:toolchain.bzl", "rust_stdlib_filegroup", "rust_toolchain")
+load("@rules_rust//rust:toolchain.bzl", "rust_miri_toolchain", "rust_stdlib_filegroup", "rust_toolchain")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -129,6 +131,8 @@ toolchain(
 )
 
 {coverage_tools_block}
+
+{miri_block}
 """
 
 _COVERAGE_TOOLS_TMPL = """\\
@@ -162,6 +166,47 @@ sh_binary(
         ":rustc_lib",
     ],
     visibility = ["//visibility:public"],
+)
+"""
+
+_MIRI_TOOLCHAIN_TMPL = """\
+filegroup(
+    name = "miri-bin",
+    srcs = ["miri.sh"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "miri-sysroot-files",
+    srcs = glob(["miri-sysroot/**"], allow_empty = True),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "miri-runtime-files",
+    srcs = glob([
+        "bin/**",
+        "lib/**",
+        "usr/lib/**",
+        "usr/local/lib/**",
+    ], allow_empty = True),
+    visibility = ["//visibility:public"],
+)
+
+rust_miri_toolchain(
+    name = "{toolchain_name}_miri",
+    miri = ":miri-bin",
+    runtime_files = ":miri-runtime-files",
+    sysroot_anchor = "miri-sysroot/.rules_rust_miri_sysroot_anchor",
+    sysroot_files = ":miri-sysroot-files",
+)
+
+toolchain(
+    name = "{toolchain_name}_miri_toolchain",
+    toolchain_type = "@rules_rust//rust:miri_toolchain_type",
+    toolchain = ":{toolchain_name}_miri",
+    exec_compatible_with = {exec_compatible_with},
+    target_compatible_with = {target_compatible_with},
 )
 """
 
@@ -201,14 +246,11 @@ fi
 exec "${bin}" "$@"
 """
 
-
-
 def _fmt_list(values):
     """Render a string list for embedding into Starlark text."""
     if not values:
         return "[]"
     return "[\n        " + ",\n        ".join(['"%s"' % v for v in values]) + "\n    ]"
-
 
 def _fmt_dict(values):
     """Render a string->string dict for embedding into Starlark text."""
@@ -221,8 +263,7 @@ def _fmt_dict(values):
         items.append('"%s": "%s"' % (key, values[key]))
     return "{\n        " + ",\n        ".join(items) + "\n    }"
 
-
-def _render_build_content(args, coverage_tools_block):
+def _render_build_content(args, coverage_tools_block, miri_block):
     return _BUILD_TMPL.format(
         toolchain_name = args.toolchain_name,
         target_triple = args.target_triple,
@@ -238,12 +279,18 @@ def _render_build_content(args, coverage_tools_block):
         target_compatible_with = _fmt_list(args.target_compatible_with),
         env = _fmt_dict(args.env),
         coverage_tools_block = coverage_tools_block,
+        miri_block = miri_block,
     )
-
 
 def _render_wrapper_script(tool, target_triple):
     return _WRAPPER_SCRIPT_TMPL.replace("__TOOL__", tool).replace("__TARGET_TRIPLE__", target_triple)
 
+def _render_miri_block(args):
+    return _MIRI_TOOLCHAIN_TMPL.format(
+        toolchain_name = args.toolchain_name,
+        exec_compatible_with = _fmt_list(args.exec_compatible_with),
+        target_compatible_with = _fmt_list(args.target_compatible_with),
+    )
 
 def _ferrocene_toolchain_repo_impl(ctx):
     ctx.download_and_extract(
@@ -253,6 +300,7 @@ def _ferrocene_toolchain_repo_impl(ctx):
     )
 
     coverage_tools_block = ""
+    miri_block = ""
     if ctx.attr.coverage_tools_url:
         if not ctx.attr.coverage_tools_sha256:
             fail("coverage_tools_sha256 must be set when coverage_tools_url is provided")
@@ -273,8 +321,24 @@ def _ferrocene_toolchain_repo_impl(ctx):
         )
         coverage_tools_block = _COVERAGE_TOOLS_TMPL
 
-    ctx.file("BUILD.bazel", _render_build_content(ctx.attr, coverage_tools_block))
+    if ctx.attr.miri_sysroot_url:
+        if not ctx.attr.miri_sysroot_sha256:
+            fail("miri_sysroot_sha256 must be set when miri_sysroot_url is provided")
+        ctx.download_and_extract(
+            url = ctx.attr.miri_sysroot_url,
+            sha256 = ctx.attr.miri_sysroot_sha256,
+            strip_prefix = ctx.attr.miri_sysroot_strip_prefix,
+            output = "miri-sysroot",
+        )
+        ctx.file("miri-sysroot/.rules_rust_miri_sysroot_anchor", "")
+        ctx.file(
+            "miri.sh",
+            _render_wrapper_script("bin/miri", ctx.attr.target_triple),
+            executable = True,
+        )
+        miri_block = _render_miri_block(ctx.attr)
 
+    ctx.file("BUILD.bazel", _render_build_content(ctx.attr, coverage_tools_block, miri_block))
 
 ferrocene_toolchain_repo = repository_rule(
     implementation = _ferrocene_toolchain_repo_impl,
@@ -304,9 +368,11 @@ ferrocene_toolchain_repo = repository_rule(
         "coverage_tools_url": attr.string(default = ""),
         "coverage_tools_sha256": attr.string(default = ""),
         "coverage_tools_strip_prefix": attr.string(default = ""),
+        "miri_sysroot_url": attr.string(default = ""),
+        "miri_sysroot_sha256": attr.string(default = ""),
+        "miri_sysroot_strip_prefix": attr.string(default = ""),
     },
 )
-
 
 def _ferrocene_toolchain_ext_impl(ctx):
     for mod in ctx.modules:
@@ -332,8 +398,10 @@ def _ferrocene_toolchain_ext_impl(ctx):
                 coverage_tools_url = toolchain.coverage_tools_url,
                 coverage_tools_sha256 = toolchain.coverage_tools_sha256,
                 coverage_tools_strip_prefix = toolchain.coverage_tools_strip_prefix,
+                miri_sysroot_url = toolchain.miri_sysroot_url,
+                miri_sysroot_sha256 = toolchain.miri_sysroot_sha256,
+                miri_sysroot_strip_prefix = toolchain.miri_sysroot_strip_prefix,
             )
-
 
 ferrocene_toolchain_ext = module_extension(
     implementation = _ferrocene_toolchain_ext_impl,
@@ -404,6 +472,18 @@ ferrocene_toolchain_ext = module_extension(
                 "coverage_tools_strip_prefix": attr.string(
                     default = "",
                     doc = "Optional strip_prefix for the coverage tools archive.",
+                ),
+                "miri_sysroot_url": attr.string(
+                    default = "",
+                    doc = "Optional URL of a prebuilt Miri sysroot archive.",
+                ),
+                "miri_sysroot_sha256": attr.string(
+                    default = "",
+                    doc = "SHA256 of the prebuilt Miri sysroot archive (hex).",
+                ),
+                "miri_sysroot_strip_prefix": attr.string(
+                    default = "",
+                    doc = "Optional strip_prefix for the prebuilt Miri sysroot archive.",
                 ),
             },
         ),

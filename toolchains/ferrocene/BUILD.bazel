@@ -47,6 +47,11 @@ alias(
 )
 
 alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu_miri",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
     name = "ferrocene_x86_64_pc_nto_qnx800",
     actual = "@ferrocene_x86_64_pc_nto_qnx800//:rust_ferrocene_toolchain",
 )
@@ -62,6 +67,11 @@ alias(
 )
 
 alias(
+    name = "ferrocene_x86_64_pc_nto_qnx800_miri",
+    actual = "@ferrocene_x86_64_pc_nto_qnx800//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
     name = "ferrocene_aarch64_unknown_nto_qnx800",
     actual = "@ferrocene_aarch64_unknown_nto_qnx800//:rust_ferrocene_toolchain",
 )
@@ -74,4 +84,14 @@ alias(
 alias(
     name = "ferrocene_aarch64_unknown_nto_qnx800_blanket",
     actual = "@ferrocene_aarch64_unknown_nto_qnx800//:blanket-wrapper",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_nto_qnx800_miri",
+    actual = "@ferrocene_aarch64_unknown_nto_qnx800//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
+    name = "ferrocene_x86_64_unknown_linux_gnu_miri",
+    actual = "@ferrocene_x86_64_unknown_linux_gnu//:rust_ferrocene_miri_toolchain",
 )
