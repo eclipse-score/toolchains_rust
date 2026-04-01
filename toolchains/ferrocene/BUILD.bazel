@@ -48,7 +48,22 @@ alias(
 
 alias(
     name = "ferrocene_aarch64_unknown_linux_gnu_miri",
-    actual = "@ferrocene_aarch64_unknown_linux_gnu//:rust_ferrocene_miri_toolchain",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu_rules_rust_miri//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu_miri_driver",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:miri",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu_miri_sysroot_files",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:miri-sysroot-files",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_linux_gnu_miri_runtime_files",
+    actual = "@ferrocene_aarch64_unknown_linux_gnu//:miri-runtime-files",
 )
 
 alias(
@@ -68,7 +83,22 @@ alias(
 
 alias(
     name = "ferrocene_x86_64_pc_nto_qnx800_miri",
-    actual = "@ferrocene_x86_64_pc_nto_qnx800//:rust_ferrocene_miri_toolchain",
+    actual = "@ferrocene_x86_64_pc_nto_qnx800_rules_rust_miri//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
+    name = "ferrocene_x86_64_pc_nto_qnx800_miri_driver",
+    actual = "@ferrocene_x86_64_pc_nto_qnx800//:miri",
+)
+
+alias(
+    name = "ferrocene_x86_64_pc_nto_qnx800_miri_sysroot_files",
+    actual = "@ferrocene_x86_64_pc_nto_qnx800//:miri-sysroot-files",
+)
+
+alias(
+    name = "ferrocene_x86_64_pc_nto_qnx800_miri_runtime_files",
+    actual = "@ferrocene_x86_64_pc_nto_qnx800//:miri-runtime-files",
 )
 
 alias(
@@ -88,10 +118,40 @@ alias(
 
 alias(
     name = "ferrocene_aarch64_unknown_nto_qnx800_miri",
-    actual = "@ferrocene_aarch64_unknown_nto_qnx800//:rust_ferrocene_miri_toolchain",
+    actual = "@ferrocene_aarch64_unknown_nto_qnx800_rules_rust_miri//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_nto_qnx800_miri_driver",
+    actual = "@ferrocene_aarch64_unknown_nto_qnx800//:miri",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_nto_qnx800_miri_sysroot_files",
+    actual = "@ferrocene_aarch64_unknown_nto_qnx800//:miri-sysroot-files",
+)
+
+alias(
+    name = "ferrocene_aarch64_unknown_nto_qnx800_miri_runtime_files",
+    actual = "@ferrocene_aarch64_unknown_nto_qnx800//:miri-runtime-files",
 )
 
 alias(
     name = "ferrocene_x86_64_unknown_linux_gnu_miri",
-    actual = "@ferrocene_x86_64_unknown_linux_gnu//:rust_ferrocene_miri_toolchain",
+    actual = "@ferrocene_x86_64_unknown_linux_gnu_rules_rust_miri//:rust_ferrocene_miri_toolchain",
+)
+
+alias(
+    name = "ferrocene_x86_64_unknown_linux_gnu_miri_driver",
+    actual = "@ferrocene_x86_64_unknown_linux_gnu//:miri",
+)
+
+alias(
+    name = "ferrocene_x86_64_unknown_linux_gnu_miri_sysroot_files",
+    actual = "@ferrocene_x86_64_unknown_linux_gnu//:miri-sysroot-files",
+)
+
+alias(
+    name = "ferrocene_x86_64_unknown_linux_gnu_miri_runtime_files",
+    actual = "@ferrocene_x86_64_unknown_linux_gnu//:miri-runtime-files",
 )

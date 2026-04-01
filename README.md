@@ -8,7 +8,7 @@ extension to wrap custom Ferrocene archives.
 - `MODULE.bazel`: pins Ferrocene 1.2.0 archives built from the Ubuntu 24.04 Ferrocene image and depends on `score_bazel_platforms`.
 - `extensions/ferrocene_toolchain_ext.bzl`: bzlmod extension to wrap arbitrary Ferrocene archives.
 - Optional Ferrocene Rust coverage tools (`symbol-report`, `blanket`) when configured.
-- Optional Miri toolchains backed by prebuilt Miri sysroot archives.
+- Optional Miri toolchain support backed by prebuilt Miri sysroot archives.
 - `toolchains/ferrocene/BUILD.bazel`: aliases to the preconfigured toolchains declared in `MODULE.bazel`.
 
 > Note: This module no longer ships platform definitions or the old rust sysroot
@@ -32,11 +32,16 @@ Preconfigured toolchains:
 - `ferrocene_x86_64_pc_nto_qnx800`
 - `ferrocene_aarch64_unknown_nto_qnx800`
 
-Preconfigured Miri toolchains:
+Preconfigured Miri toolchain aliases:
 - `ferrocene_x86_64_unknown_linux_gnu_miri`
 - `ferrocene_aarch64_unknown_linux_gnu_miri`
 - `ferrocene_x86_64_pc_nto_qnx800_miri`
 - `ferrocene_aarch64_unknown_nto_qnx800_miri`
+
+Preconfigured direct-Miri artifact aliases:
+- `*_miri_driver`
+- `*_miri_sysroot_files`
+- `*_miri_runtime_files`
 
 Coverage tools are available from the generated repositories (wrappers set `LD_LIBRARY_PATH` automatically):
 
@@ -75,8 +80,21 @@ register_toolchains("@ferrocene_x86_64_unknown_linux_gnu//:rust_ferrocene_toolch
 
 `miri_sysroot_url` is the supported path for Miri integration. The generated repo
 expects a prebuilt Miri sysroot archive and does not build one at repository
-rule time. Generate and publish the sysroot alongside the Ferrocene release
-artifacts in `ferrocene_builder`, then point `miri_sysroot_url` at that asset.
+rule time. For the built-in Ferrocene toolchains, `score_toolchains_rust`
+re-exports a `rules_rust` Miri toolchain through the same simple public aliases:
+
+```bazelrc
+build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu_miri
+```
+
+The base Ferrocene repos remain backward compatible because they only expose the
+direct `miri` wrapper and its artifacts. The `rules_rust` Miri toolchain is
+created in separate companion repositories and is only loaded when a `*_miri`
+alias is actually used. This keeps repositories that do not use Miri working
+with older `rules_rust` versions.
+
+For custom Ferrocene archives, you can still opt in explicitly to the companion
+`rules_rust` Miri toolchain via `ferrocene_rules_rust_miri_toolchain_ext`.
 
 Add more `ferrocene.toolchain(...)` entries for other archives such as
 `aarch64-unknown-linux-gnu`, `aarch64-unknown-nto-qnx800`, or

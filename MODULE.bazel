@@ -27,6 +27,12 @@ ferrocene = use_extension(
     "//extensions:ferrocene_toolchain_ext.bzl",
     "ferrocene_toolchain_ext",
 )
+
+ferrocene_rules_rust_miri = use_extension(
+    "//extensions:ferrocene_toolchain_ext.bzl",
+    "ferrocene_rules_rust_miri_toolchain_ext",
+)
+
 ferrocene.toolchain(
     name = "ferrocene_x86_64_unknown_linux_gnu",
     coverage_tools_sha256 = "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
@@ -119,10 +125,68 @@ ferrocene.toolchain(
     target_triple = "aarch64-unknown-nto-qnx800",
     url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz",
 )
+
+ferrocene_rules_rust_miri.toolchain(
+    name = "ferrocene_x86_64_unknown_linux_gnu_rules_rust_miri",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    ferrocene_repo_name = "ferrocene_x86_64_unknown_linux_gnu",
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+)
+ferrocene_rules_rust_miri.toolchain(
+    name = "ferrocene_aarch64_unknown_linux_gnu_rules_rust_miri",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    ferrocene_repo_name = "ferrocene_aarch64_unknown_linux_gnu",
+    target_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+)
+ferrocene_rules_rust_miri.toolchain(
+    name = "ferrocene_x86_64_pc_nto_qnx800_rules_rust_miri",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    ferrocene_repo_name = "ferrocene_x86_64_pc_nto_qnx800",
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:qnx",
+    ],
+)
+ferrocene_rules_rust_miri.toolchain(
+    name = "ferrocene_aarch64_unknown_nto_qnx800_rules_rust_miri",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    ferrocene_repo_name = "ferrocene_aarch64_unknown_nto_qnx800",
+    target_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:qnx",
+    ],
+)
+
 use_repo(
     ferrocene,
     "ferrocene_aarch64_unknown_linux_gnu",
     "ferrocene_aarch64_unknown_nto_qnx800",
     "ferrocene_x86_64_pc_nto_qnx800",
     "ferrocene_x86_64_unknown_linux_gnu",
+)
+
+use_repo(
+    ferrocene_rules_rust_miri,
+    "ferrocene_aarch64_unknown_linux_gnu_rules_rust_miri",
+    "ferrocene_aarch64_unknown_nto_qnx800_rules_rust_miri",
+    "ferrocene_x86_64_pc_nto_qnx800_rules_rust_miri",
+    "ferrocene_x86_64_unknown_linux_gnu_rules_rust_miri",
 )

@@ -19,12 +19,12 @@ This extension wraps a prebuilt Ferrocene archive (e.g. produced by
 
 Optionally, the same repository can include the Ferrocene Rust coverage tools
 (`symbol-report` and `blanket`) with wrapper scripts that set `LD_LIBRARY_PATH`
-for the embedded `rustc_private` shared libraries. It can also expose a Miri
-toolchain backed by a prebuilt Miri sysroot archive.
+for the embedded `rustc_private` shared libraries. It can also expose direct
+Miri artifacts backed by a prebuilt Miri sysroot archive.
 """
 
 _BUILD_TMPL = """\\
-load("@rules_rust//rust:toolchain.bzl", "rust_miri_toolchain", "rust_stdlib_filegroup", "rust_toolchain")
+load("@rules_rust//rust:toolchain.bzl", "rust_stdlib_filegroup", "rust_toolchain")
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
 package(default_visibility = ["//visibility:public"])
@@ -169,10 +169,26 @@ sh_binary(
 )
 """
 
-_MIRI_TOOLCHAIN_TMPL = """\
+_MIRI_ARTIFACTS_TMPL = """\
+sh_binary(
+    name = "miri",
+    srcs = ["miri.sh"],
+    data = [
+        ":miri-runtime-files",
+        ":miri-sysroot-files",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 filegroup(
     name = "miri-bin",
     srcs = ["miri.sh"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "miri-sysroot-anchor",
+    srcs = ["miri-sysroot/.rules_rust_miri_sysroot_anchor"],
     visibility = ["//visibility:public"],
 )
 
@@ -192,13 +208,20 @@ filegroup(
     ], allow_empty = True),
     visibility = ["//visibility:public"],
 )
+"""
+
+_RULES_RUST_MIRI_TOOLCHAIN_TMPL = """\
+load("@rules_rust//rust:toolchain.bzl", "rust_miri_toolchain")
+
+package(default_visibility = ["//visibility:public"])
 
 rust_miri_toolchain(
     name = "{toolchain_name}_miri",
-    miri = ":miri-bin",
-    runtime_files = ":miri-runtime-files",
-    sysroot_anchor = "miri-sysroot/.rules_rust_miri_sysroot_anchor",
-    sysroot_files = ":miri-sysroot-files",
+    env = {env},
+    miri = "@{ferrocene_repo_name}//:miri-bin",
+    runtime_files = "@{ferrocene_repo_name}//:miri-runtime-files",
+    sysroot_anchor = "@{ferrocene_repo_name}//:miri-sysroot-anchor",
+    sysroot_files = "@{ferrocene_repo_name}//:miri-sysroot-files",
 )
 
 toolchain(
@@ -285,9 +308,14 @@ def _render_build_content(args, coverage_tools_block, miri_block):
 def _render_wrapper_script(tool, target_triple):
     return _WRAPPER_SCRIPT_TMPL.replace("__TOOL__", tool).replace("__TARGET_TRIPLE__", target_triple)
 
-def _render_miri_block(args):
-    return _MIRI_TOOLCHAIN_TMPL.format(
+def _render_miri_block():
+    return _MIRI_ARTIFACTS_TMPL
+
+def _render_rules_rust_miri_toolchain_build(args):
+    return _RULES_RUST_MIRI_TOOLCHAIN_TMPL.format(
         toolchain_name = args.toolchain_name,
+        ferrocene_repo_name = args.ferrocene_repo_name,
+        env = _fmt_dict(args.env),
         exec_compatible_with = _fmt_list(args.exec_compatible_with),
         target_compatible_with = _fmt_list(args.target_compatible_with),
     )
@@ -336,7 +364,7 @@ def _ferrocene_toolchain_repo_impl(ctx):
             _render_wrapper_script("bin/miri", ctx.attr.target_triple),
             executable = True,
         )
-        miri_block = _render_miri_block(ctx.attr)
+        miri_block = _render_miri_block()
 
     ctx.file("BUILD.bazel", _render_build_content(ctx.attr, coverage_tools_block, miri_block))
 
@@ -374,6 +402,26 @@ ferrocene_toolchain_repo = repository_rule(
     },
 )
 
+def _ferrocene_rules_rust_miri_toolchain_repo_impl(ctx):
+    ctx.file("BUILD.bazel", _render_rules_rust_miri_toolchain_build(ctx.attr))
+
+ferrocene_rules_rust_miri_toolchain_repo = repository_rule(
+    implementation = _ferrocene_rules_rust_miri_toolchain_repo_impl,
+    attrs = {
+        "ferrocene_repo_name": attr.string(mandatory = True),
+        "toolchain_name": attr.string(default = "rust_ferrocene"),
+        "env": attr.string_dict(default = {}),
+        "exec_compatible_with": attr.string_list(default = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:linux",
+        ]),
+        "target_compatible_with": attr.string_list(default = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:linux",
+        ]),
+    },
+)
+
 def _ferrocene_toolchain_ext_impl(ctx):
     for mod in ctx.modules:
         for toolchain in mod.tags.toolchain:
@@ -401,6 +449,18 @@ def _ferrocene_toolchain_ext_impl(ctx):
                 miri_sysroot_url = toolchain.miri_sysroot_url,
                 miri_sysroot_sha256 = toolchain.miri_sysroot_sha256,
                 miri_sysroot_strip_prefix = toolchain.miri_sysroot_strip_prefix,
+            )
+
+def _ferrocene_rules_rust_miri_toolchain_ext_impl(ctx):
+    for mod in ctx.modules:
+        for toolchain in mod.tags.toolchain:
+            ferrocene_rules_rust_miri_toolchain_repo(
+                name = toolchain.name,
+                ferrocene_repo_name = toolchain.ferrocene_repo_name,
+                toolchain_name = toolchain.toolchain_name,
+                env = toolchain.env,
+                exec_compatible_with = toolchain.exec_compatible_with,
+                target_compatible_with = toolchain.target_compatible_with,
             )
 
 ferrocene_toolchain_ext = module_extension(
@@ -484,6 +544,46 @@ ferrocene_toolchain_ext = module_extension(
                 "miri_sysroot_strip_prefix": attr.string(
                     default = "",
                     doc = "Optional strip_prefix for the prebuilt Miri sysroot archive.",
+                ),
+            },
+        ),
+    },
+)
+
+ferrocene_rules_rust_miri_toolchain_ext = module_extension(
+    implementation = _ferrocene_rules_rust_miri_toolchain_ext_impl,
+    tag_classes = {
+        "toolchain": tag_class(
+            attrs = {
+                "name": attr.string(
+                    mandatory = True,
+                    doc = "Repository name that will host the rules_rust Miri toolchain definition.",
+                ),
+                "ferrocene_repo_name": attr.string(
+                    mandatory = True,
+                    doc = "Repository name of the base Ferrocene toolchain repo produced by ferrocene_toolchain_ext.",
+                ),
+                "toolchain_name": attr.string(
+                    default = "rust_ferrocene",
+                    doc = "Name for the rust_miri_toolchain target inside the generated repo.",
+                ),
+                "env": attr.string_dict(
+                    default = {},
+                    doc = "Optional environment variables passed through the rules_rust Miri toolchain provider.",
+                ),
+                "exec_compatible_with": attr.string_list(
+                    default = [
+                        "@platforms//cpu:x86_64",
+                        "@platforms//os:linux",
+                    ],
+                    doc = "Compatibility constraints for the execution platform.",
+                ),
+                "target_compatible_with": attr.string_list(
+                    default = [
+                        "@platforms//cpu:x86_64",
+                        "@platforms//os:linux",
+                    ],
+                    doc = "Compatibility constraints for the target platform.",
                 ),
             },
         ),

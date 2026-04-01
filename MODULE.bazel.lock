@@ -269,9 +269,85 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
+    "//extensions:ferrocene_toolchain_ext.bzl%ferrocene_rules_rust_miri_toolchain_ext": {
+      "general": {
+        "bzlTransitiveDigest": "JTR6scmBZuukTYspnbvaNFU27CfBHiQyu6OywcI1QPE=",
+        "usagesDigest": "Z4fXKYOxqm4evxSNjaaTWD65TdzzvcsfkuFRiIbfwcc=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "ferrocene_x86_64_unknown_linux_gnu_rules_rust_miri": {
+            "repoRuleId": "@@//extensions:ferrocene_toolchain_ext.bzl%ferrocene_rules_rust_miri_toolchain_repo",
+            "attributes": {
+              "ferrocene_repo_name": "ferrocene_x86_64_unknown_linux_gnu",
+              "toolchain_name": "rust_ferrocene",
+              "env": {},
+              "exec_compatible_with": [
+                "@platforms//cpu:x86_64",
+                "@platforms//os:linux"
+              ],
+              "target_compatible_with": [
+                "@platforms//cpu:x86_64",
+                "@platforms//os:linux"
+              ]
+            }
+          },
+          "ferrocene_aarch64_unknown_linux_gnu_rules_rust_miri": {
+            "repoRuleId": "@@//extensions:ferrocene_toolchain_ext.bzl%ferrocene_rules_rust_miri_toolchain_repo",
+            "attributes": {
+              "ferrocene_repo_name": "ferrocene_aarch64_unknown_linux_gnu",
+              "toolchain_name": "rust_ferrocene",
+              "env": {},
+              "exec_compatible_with": [
+                "@platforms//cpu:x86_64",
+                "@platforms//os:linux"
+              ],
+              "target_compatible_with": [
+                "@platforms//cpu:aarch64",
+                "@platforms//os:linux"
+              ]
+            }
+          },
+          "ferrocene_x86_64_pc_nto_qnx800_rules_rust_miri": {
+            "repoRuleId": "@@//extensions:ferrocene_toolchain_ext.bzl%ferrocene_rules_rust_miri_toolchain_repo",
+            "attributes": {
+              "ferrocene_repo_name": "ferrocene_x86_64_pc_nto_qnx800",
+              "toolchain_name": "rust_ferrocene",
+              "env": {},
+              "exec_compatible_with": [
+                "@platforms//cpu:x86_64",
+                "@platforms//os:linux"
+              ],
+              "target_compatible_with": [
+                "@platforms//cpu:x86_64",
+                "@platforms//os:qnx"
+              ]
+            }
+          },
+          "ferrocene_aarch64_unknown_nto_qnx800_rules_rust_miri": {
+            "repoRuleId": "@@//extensions:ferrocene_toolchain_ext.bzl%ferrocene_rules_rust_miri_toolchain_repo",
+            "attributes": {
+              "ferrocene_repo_name": "ferrocene_aarch64_unknown_nto_qnx800",
+              "toolchain_name": "rust_ferrocene",
+              "env": {},
+              "exec_compatible_with": [
+                "@platforms//cpu:x86_64",
+                "@platforms//os:linux"
+              ],
+              "target_compatible_with": [
+                "@platforms//cpu:aarch64",
+                "@platforms//os:qnx"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    },
     "//extensions:ferrocene_toolchain_ext.bzl%ferrocene_toolchain_ext": {
       "general": {
-        "bzlTransitiveDigest": "cDrU3qbCVTsVtlUjOOAo+ecksKKnhGWBr4Gm6hbNfvU=",
+        "bzlTransitiveDigest": "JTR6scmBZuukTYspnbvaNFU27CfBHiQyu6OywcI1QPE=",
         "usagesDigest": "LDuRIyQwDXjBRAhsz5jxrR+un95AMkj1vuxM2NuBZl8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
