@@ -35,7 +35,7 @@ ferrocene_rules_rust_miri = use_extension(
 
 ferrocene.toolchain(
     name = "ferrocene_x86_64_unknown_linux_gnu",
-    coverage_tools_sha256 = "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+    coverage_tools_sha256 = "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
     coverage_tools_strip_prefix = "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
     coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     exec_triple = "x86_64-unknown-linux-gnu",
@@ -58,7 +58,7 @@ ferrocene.toolchain(
 )
 ferrocene.toolchain(
     name = "ferrocene_aarch64_unknown_linux_gnu",
-    coverage_tools_sha256 = "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+    coverage_tools_sha256 = "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
     coverage_tools_strip_prefix = "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
     coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     exec_triple = "x86_64-unknown-linux-gnu",
@@ -81,7 +81,7 @@ ferrocene.toolchain(
 )
 ferrocene.toolchain(
     name = "ferrocene_x86_64_pc_nto_qnx800",
-    coverage_tools_sha256 = "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+    coverage_tools_sha256 = "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
     coverage_tools_strip_prefix = "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
     coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     exec_triple = "x86_64-unknown-linux-gnu",
@@ -104,7 +104,7 @@ ferrocene.toolchain(
 )
 ferrocene.toolchain(
     name = "ferrocene_aarch64_unknown_nto_qnx800",
-    coverage_tools_sha256 = "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+    coverage_tools_sha256 = "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
     coverage_tools_strip_prefix = "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
     coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     exec_triple = "x86_64-unknown-linux-gnu",

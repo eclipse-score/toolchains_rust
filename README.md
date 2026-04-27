@@ -66,7 +66,7 @@ ferrocene.toolchain(
     url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     sha256 = "4082058e4d054b1e26261e7ec99f01bf807f87b4ea580d246e48d9ccd487a591",
     coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-    coverage_tools_sha256 = "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+    coverage_tools_sha256 = "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
     miri_sysroot_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     miri_sysroot_sha256 = "8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745",
     miri_sysroot_strip_prefix = "x86_64-unknown-linux-gnu",
@@ -111,7 +111,7 @@ Base URL:
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `3fd5fe5da4836eb6d554731e7899d378a6992106ce6275b136279dec29598383` |
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `4082058e4d054b1e26261e7ec99f01bf807f87b4ea580d246e48d9ccd487a591` |
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `3fede22a89d7431668d4bc2810147a957d2b334ee8cb7097ad9c56b546f805cc` |
-| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab` |
+| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `74f90eabcb34809e44300535016f25eb0cf4a500763c0d18e7f587583b5b9908` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `ac434b7dc3cc3d67d31f73513a027aea50cca355c189c3a3f8c3162b1fccbca0` |
