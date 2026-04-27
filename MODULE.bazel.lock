@@ -384,7 +384,7 @@
                 "@platforms//os:linux"
               ],
               "coverage_tools_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-              "coverage_tools_sha256": "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+              "coverage_tools_sha256": "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
               "coverage_tools_strip_prefix": "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
               "miri_sysroot_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
               "miri_sysroot_sha256": "8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745",
@@ -422,7 +422,7 @@
                 "@platforms//os:linux"
               ],
               "coverage_tools_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-              "coverage_tools_sha256": "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+              "coverage_tools_sha256": "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
               "coverage_tools_strip_prefix": "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
               "miri_sysroot_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz",
               "miri_sysroot_sha256": "74f90eabcb34809e44300535016f25eb0cf4a500763c0d18e7f587583b5b9908",
@@ -460,7 +460,7 @@
                 "@platforms//os:qnx"
               ],
               "coverage_tools_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-              "coverage_tools_sha256": "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+              "coverage_tools_sha256": "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
               "coverage_tools_strip_prefix": "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
               "miri_sysroot_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz",
               "miri_sysroot_sha256": "ac434b7dc3cc3d67d31f73513a027aea50cca355c189c3a3f8c3162b1fccbca0",
@@ -498,7 +498,7 @@
                 "@platforms//os:qnx"
               ],
               "coverage_tools_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-              "coverage_tools_sha256": "5a136b0b654625b794aec9e189ab1be92a23c0a56eb6fc16984b629fee034cab",
+              "coverage_tools_sha256": "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
               "coverage_tools_strip_prefix": "779fbed05ae9e9fe2a04137929d99cc9b3d516fd/x86_64-unknown-linux-gnu",
               "miri_sysroot_url": "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz",
               "miri_sysroot_sha256": "8fc8f406c33a7dc31362133b8a2ffbb66b44f62354bfc98a3bc21a1fcbc9a7e6",
