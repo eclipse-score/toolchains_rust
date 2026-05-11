@@ -17,7 +17,7 @@ module(
 )
 
 bazel_dep(name = "platforms", version = "0.0.11")
-bazel_dep(name = "score_bazel_platforms", version = "0.0.3")
+bazel_dep(name = "score_bazel_platforms", version = "0.1.2")
 bazel_dep(name = "rules_rust", version = "0.56.0")
 bazel_dep(name = "rules_shell", version = "0.3.0")
 
