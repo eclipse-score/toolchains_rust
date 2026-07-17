@@ -67,6 +67,7 @@ ferrocene.toolchain(
         "-Clink-arg=-lstdc++",
         "-Clink-arg=-lm",
         "-Clink-arg=-lc",
+        "-Clink-arg=-lgcc",
     ],
     miri_sysroot_sha256 = "74f90eabcb34809e44300535016f25eb0cf4a500763c0d18e7f587583b5b9908",
     miri_sysroot_strip_prefix = "aarch64-unknown-linux-gnu",

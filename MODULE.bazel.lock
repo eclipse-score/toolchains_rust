@@ -348,7 +348,7 @@
     "//extensions:ferrocene_toolchain_ext.bzl%ferrocene_toolchain_ext": {
       "general": {
         "bzlTransitiveDigest": "JTR6scmBZuukTYspnbvaNFU27CfBHiQyu6OywcI1QPE=",
-        "usagesDigest": "3kOi9ZQ7CwvyfvR2TUOe9FHbsxa796pSC1jmnoIxy/g=",
+        "usagesDigest": "rWEZaM0xWw7yeL7B75jmGTsU4xi83MP5olBN4FBicSo=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -409,7 +409,8 @@
                 "-Clink-arg=-Wl,--no-as-needed",
                 "-Clink-arg=-lstdc++",
                 "-Clink-arg=-lm",
-                "-Clink-arg=-lc"
+                "-Clink-arg=-lc",
+                "-Clink-arg=-lgcc"
               ],
               "extra_exec_rustc_flags": [],
               "env": {},
