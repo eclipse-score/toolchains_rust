@@ -5,7 +5,7 @@ extension to wrap custom Ferrocene archives.
 
 ## What’s inside
 
-- `MODULE.bazel`: pins Ferrocene 1.2.0 archives built from the Ubuntu 24.04 Ferrocene image and depends on `score_bazel_platforms`.
+- `MODULE.bazel`: pins Ferrocene 1.3.0 archives built from the Ubuntu 24.04 Ferrocene image and depends on `score_bazel_platforms`.
 - `extensions/ferrocene_toolchain_ext.bzl`: bzlmod extension to wrap arbitrary Ferrocene archives.
 - Optional Ferrocene Rust coverage tools (`symbol-report`, `blanket`) when configured.
 - Optional Miri toolchain support backed by prebuilt Miri sysroot archives.
@@ -63,11 +63,11 @@ ferrocene = use_extension(
 
 ferrocene.toolchain(
     name = "ferrocene_x86_64_unknown_linux_gnu",
-    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     sha256 = "4082058e4d054b1e26261e7ec99f01bf807f87b4ea580d246e48d9ccd487a591",
-    coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-    coverage_tools_sha256 = "841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0",
-    miri_sysroot_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    coverage_tools_sha256 = "f4b1cdcaf644b3dac429dfc50c674cde8f9620e1a563e3dcdfb313a7ce68c888",
+    miri_sysroot_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
     miri_sysroot_sha256 = "8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745",
     miri_sysroot_strip_prefix = "x86_64-unknown-linux-gnu",
     target_triple = "x86_64-unknown-linux-gnu",
@@ -100,10 +100,10 @@ Add more `ferrocene.toolchain(...)` entries for other archives such as
 `aarch64-unknown-linux-gnu`, `aarch64-unknown-nto-qnx800`, or
 `x86_64-pc-nto-qnx800`.
 
-Ferrocene `1.2.0` artifacts:
+Ferrocene `1.3.0` artifacts:
 
 Base URL:
-`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.2.0/`
+`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/`
 
 | File | sha256 |
 | --- | --- |
@@ -111,7 +111,7 @@ Base URL:
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `3fd5fe5da4836eb6d554731e7899d378a6992106ce6275b136279dec29598383` |
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `4082058e4d054b1e26261e7ec99f01bf807f87b4ea580d246e48d9ccd487a591` |
 | `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `3fede22a89d7431668d4bc2810147a957d2b334ee8cb7097ad9c56b546f805cc` |
-| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `841172d34b2fc0a8bed2756cf16f38d29ac18c13ee29fbb87af3ae047aa2a6a0` |
+| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `f4b1cdcaf644b3dac429dfc50c674cde8f9620e1a563e3dcdfb313a7ce68c888` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `74f90eabcb34809e44300535016f25eb0cf4a500763c0d18e7f587583b5b9908` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `ac434b7dc3cc3d67d31f73513a027aea50cca355c189c3a3f8c3162b1fccbca0` |

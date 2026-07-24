@@ -119,7 +119,7 @@ rust_toolchain(
     extra_rustc_flags = {extra_rustc_flags},
     extra_exec_rustc_flags = {extra_exec_rustc_flags},
     env = {env},
-    tags = ["manual"],
+{llvm_tools_block}    tags = ["manual"],
 )
 
 toolchain(
@@ -165,6 +165,32 @@ sh_binary(
         ":blanket-bin",
         ":rustc_lib",
     ],
+    visibility = ["//visibility:public"],
+)
+"""
+
+# LLVM coverage tools shipped in coverage-tools tarballs produced by
+# ferrocene_toolchain_builder >= 1.3.0. They are built from the same LLVM
+# tree as the Ferrocene rustc, so they can always read the profraw/covmap
+# format the compiler emits.
+_LLVM_COV_TOOLS_TMPL = """\\
+filegroup(
+    name = "llvm-cov-bin",
+    srcs = ["llvm-cov"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "llvm-profdata-bin",
+    srcs = ["llvm-profdata"],
+    visibility = ["//visibility:public"],
+)
+"""
+
+_LLVM_CXXFILT_TMPL = """\\
+filegroup(
+    name = "llvm-cxxfilt-bin",
+    srcs = ["llvm-cxxfilt"],
     visibility = ["//visibility:public"],
 )
 """
@@ -286,7 +312,7 @@ def _fmt_dict(values):
         items.append('"%s": "%s"' % (key, values[key]))
     return "{\n        " + ",\n        ".join(items) + "\n    }"
 
-def _render_build_content(args, coverage_tools_block, miri_block):
+def _render_build_content(args, coverage_tools_block, miri_block, llvm_tools_block = ""):
     return _BUILD_TMPL.format(
         toolchain_name = args.toolchain_name,
         target_triple = args.target_triple,
@@ -303,6 +329,7 @@ def _render_build_content(args, coverage_tools_block, miri_block):
         env = _fmt_dict(args.env),
         coverage_tools_block = coverage_tools_block,
         miri_block = miri_block,
+        llvm_tools_block = llvm_tools_block,
     )
 
 def _render_wrapper_script(tool, target_triple):
@@ -328,6 +355,7 @@ def _ferrocene_toolchain_repo_impl(ctx):
     )
 
     coverage_tools_block = ""
+    llvm_tools_block = ""
     miri_block = ""
     if ctx.attr.coverage_tools_url:
         if not ctx.attr.coverage_tools_sha256:
@@ -349,6 +377,22 @@ def _ferrocene_toolchain_repo_impl(ctx):
         )
         coverage_tools_block = _COVERAGE_TOOLS_TMPL
 
+        # coverage-tools tarballs from ferrocene_toolchain_builder >= 1.3.0
+        # additionally ship llvm-cov/llvm-profdata (and llvm-cxxfilt) built
+        # from the same LLVM as rustc. When present, wire them into the
+        # rust_toolchain: rules_rust only instruments crates under
+        # `bazel coverage` (--codegen=instrument-coverage) and exports
+        # RUST_LLVM_COV / RUST_LLVM_PROFDATA to the coverage runner when the
+        # toolchain declares llvm_cov. Older tarballs simply skip this block.
+        if ctx.path("llvm-cov").exists and ctx.path("llvm-profdata").exists:
+            coverage_tools_block += "\n" + _LLVM_COV_TOOLS_TMPL
+            llvm_tools_block = (
+                '    llvm_cov = ":llvm-cov-bin",\n' +
+                '    llvm_profdata = ":llvm-profdata-bin",\n'
+            )
+            if ctx.path("llvm-cxxfilt").exists:
+                coverage_tools_block += "\n" + _LLVM_CXXFILT_TMPL
+
     if ctx.attr.miri_sysroot_url:
         if not ctx.attr.miri_sysroot_sha256:
             fail("miri_sysroot_sha256 must be set when miri_sysroot_url is provided")
@@ -366,7 +410,7 @@ def _ferrocene_toolchain_repo_impl(ctx):
         )
         miri_block = _render_miri_block()
 
-    ctx.file("BUILD.bazel", _render_build_content(ctx.attr, coverage_tools_block, miri_block))
+    ctx.file("BUILD.bazel", _render_build_content(ctx.attr, coverage_tools_block, miri_block, llvm_tools_block))
 
 ferrocene_toolchain_repo = repository_rule(
     implementation = _ferrocene_toolchain_repo_impl,
