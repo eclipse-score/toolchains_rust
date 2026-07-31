@@ -5,7 +5,7 @@ extension to wrap custom Ferrocene archives.
 
 ## What’s inside
 
-- `MODULE.bazel`: pins Ferrocene 1.3.0 archives built from the Ubuntu 24.04 Ferrocene image and depends on `score_bazel_platforms`.
+- `MODULE.bazel`: pins Ferrocene 1.3.1 archives built from the Ubuntu 24.04 Ferrocene image and depends on `score_bazel_platforms`.
 - `extensions/ferrocene_toolchain_ext.bzl`: bzlmod extension to wrap arbitrary Ferrocene archives.
 - Optional Ferrocene Rust coverage tools (`symbol-report`, `blanket`) when configured.
 - Optional Miri toolchain support backed by prebuilt Miri sysroot archives.
@@ -63,12 +63,12 @@ ferrocene = use_extension(
 
 ferrocene.toolchain(
     name = "ferrocene_x86_64_unknown_linux_gnu",
-    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-    sha256 = "4082058e4d054b1e26261e7ec99f01bf807f87b4ea580d246e48d9ccd487a591",
-    coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-    coverage_tools_sha256 = "f4b1cdcaf644b3dac429dfc50c674cde8f9620e1a563e3dcdfb313a7ce68c888",
-    miri_sysroot_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
-    miri_sysroot_sha256 = "8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745",
+    url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.1/ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    sha256 = "6fd7c7053a80463b2bfd24202de02e16959b18ed185c55b738148e9caac42eff",
+    coverage_tools_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.1/coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    coverage_tools_sha256 = "9cf5d76b2e505bf2a8b2b47c60f191ac1273f87851ed387e53080b8e5d14dedf",
+    miri_sysroot_url = "https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.1/miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz",
+    miri_sysroot_sha256 = "143260fe3873249160d57b370717005828e129d3b6782448a32d8cc578384fe0",
     miri_sysroot_strip_prefix = "x86_64-unknown-linux-gnu",
     target_triple = "x86_64-unknown-linux-gnu",
     exec_triple = "x86_64-unknown-linux-gnu",
@@ -100,22 +100,22 @@ Add more `ferrocene.toolchain(...)` entries for other archives such as
 `aarch64-unknown-linux-gnu`, `aarch64-unknown-nto-qnx800`, or
 `x86_64-pc-nto-qnx800`.
 
-Ferrocene `1.3.0` artifacts:
+Ferrocene `1.3.1` artifacts:
 
 Base URL:
-`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.0/`
+`https://github.com/eclipse-score/ferrocene_toolchain_builder/releases/download/1.3.1/`
 
 | File | sha256 |
 | --- | --- |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `d5ccceb0e3118a5e6bfdf1a3f894054db3c2cd346f927b39a57a69faf688849d` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `3fd5fe5da4836eb6d554731e7899d378a6992106ce6275b136279dec29598383` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `4082058e4d054b1e26261e7ec99f01bf807f87b4ea580d246e48d9ccd487a591` |
-| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `3fede22a89d7431668d4bc2810147a957d2b334ee8cb7097ad9c56b546f805cc` |
-| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `f4b1cdcaf644b3dac429dfc50c674cde8f9620e1a563e3dcdfb313a7ce68c888` |
-| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `8b745cc64fe4d9d27081196cc565ea3cd198b24fce0ef7e2f014a11d85629745` |
-| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `74f90eabcb34809e44300535016f25eb0cf4a500763c0d18e7f587583b5b9908` |
-| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `ac434b7dc3cc3d67d31f73513a027aea50cca355c189c3a3f8c3162b1fccbca0` |
-| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `8fc8f406c33a7dc31362133b8a2ffbb66b44f62354bfc98a3bc21a1fcbc9a7e6` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `a8e80da21c6abebfb31063f3815cd3a4bbb5a1466855a12043d7c243ef152715` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `06ee88a935083068325b69028e9d4e9adc696542cea9b4322642a55dafcae552` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `6fd7c7053a80463b2bfd24202de02e16959b18ed185c55b738148e9caac42eff` |
+| `ferrocene-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `655ad0d212baf63f4dd03065735ca55cddadc86cf6bd005aeb19689e348a0023` |
+| `coverage-tools-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `9cf5d76b2e505bf2a8b2b47c60f191ac1273f87851ed387e53080b8e5d14dedf` |
+| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-unknown-linux-gnu.tar.gz` | `143260fe3873249160d57b370717005828e129d3b6782448a32d8cc578384fe0` |
+| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-linux-gnu.tar.gz` | `4059e74c79147b942eb595c14a5f998ebdb1063764ea756b4f32c21bf5903a16` |
+| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `9684ea089c883a0739f402165fc6aa374a69641e763957c314688779e8124931` |
+| `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `3077170b7384d6bcf2cf8f53db8b670d48fc7e2237285b4fd799c64e7412bdff` |
 
 ---
 
