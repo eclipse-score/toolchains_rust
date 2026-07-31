@@ -1,0 +1,50 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+name: Example Smoke Tests
+permissions:
+  contents: read
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
+  push:
+    branches:
+      - main
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Build examples
+        run: bazel build --lockfile_mode=error --config=smoke //examples/basic/...
+
+      - name: Run example tests
+        run: bazel test --lockfile_mode=error --config=smoke //examples/basic/...
+
+      - name: Run example coverage
+        run: bazel coverage --lockfile_mode=error --config=smoke //examples/basic:basic_test
+
+      - name: Verify coverage data
+        run: |
+          set -euo pipefail
+          dat="bazel-testlogs/examples/basic/basic_test/coverage.dat"
+          test -s "${dat}" || { echo "ERROR: ${dat} missing or empty"; exit 1; }
+          grep -q "^SF:.*examples/basic/src/lib.rs" "${dat}" \
+            || { echo "ERROR: lib.rs not in coverage data"; cat "${dat}"; exit 1; }
+          grep -Eq "^DA:[0-9]+,[1-9]" "${dat}" \
+            || { echo "ERROR: no executed lines recorded"; cat "${dat}"; exit 1; }
+          echo "Coverage smoke OK:"
+          grep -E "^(SF|LF|LH):" "${dat}"

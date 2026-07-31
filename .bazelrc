@@ -1,2 +1,10 @@
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
+
+# ------------------------------------------------------------------------------
+# Smoke-test config for the in-repo examples (see examples/ and
+# .github/workflows/examples.yml). Consumes the toolchains exactly the way
+# downstream repositories do, via --extra_toolchains.
+# ------------------------------------------------------------------------------
+build:smoke --extra_toolchains=//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+coverage:smoke --nocache_test_results
