@@ -11,9 +11,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-filegroup(
-    name = "qnx800_target_specs",
-    srcs = [
+# Expose raw JSON specification files to external repository boundaries (score_crates)
+exports_files(
+    [
         "aarch64-unknown-nto-qnx800.json",
         "x86_64-pc-nto-qnx800.json",
     ],
