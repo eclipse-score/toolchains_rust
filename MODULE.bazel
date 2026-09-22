@@ -10,11 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(
-    name = "score_toolchains_rust",
-    version = "0.0.0",
-    compatibility_level = 0,
-)
+module(name = "score_toolchains_rust")
 
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "score_bazel_platforms", version = "1.0.0")
