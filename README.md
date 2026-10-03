@@ -117,6 +117,31 @@ Base URL:
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-x86_64-pc-nto-qnx800.tar.gz` | `9684ea089c883a0739f402165fc6aa374a69641e763957c314688779e8124931` |
 | `miri-sysroot-779fbed05ae9e9fe2a04137929d99cc9b3d516fd-aarch64-unknown-nto-qnx800.tar.gz` | `3077170b7384d6bcf2cf8f53db8b670d48fc7e2237285b4fd799c64e7412bdff` |
 
+## QNX AArch64 QEMU Smoke Testing
+
+The repository provides end-to-end smoke testing for the QNX AArch64 Ferrocene Rust toolchain (`ferrocene_aarch64_unknown_nto_qnx800`) using standard, unpatched QEMU (`qemu-system-aarch64` with `-machine virt -cpu max`).
+
+### Building and Testing
+
+To build the Hello World example binary for QNX AArch64:
+
+```bash
+bazel build --config=qnx-aarch64 //examples/basic:hello
+```
+
+To execute the smoke test inside an emulated QNX AArch64 QEMU virtual machine:
+
+```bash
+bazel test --config=qnx-aarch64 //examples/basic:basic_test
+```
+
+Under the hood:
+- Bazel cross-compiles the Rust test binary using `ferrocene_aarch64_unknown_nto_qnx800` and links with QNX SDP C/C++ libraries via `score_bazel_cpp_toolchains`.
+- An Image File System (`init.ifs`) boot image is generated via `score_rules_imagefs`.
+- The test runner invokes `@score_qnx_unit_tests//src:run_under_qnx`, which boots `qemu-system-aarch64` (`-machine virt -cpu max`), shares the test workspace via virtio-9p, executes the binary, and reports the result to stdout.
+
+CI executes this workflow on pull requests and pushes via `.github/workflows/qnx_qemu_smoke.yml`, reusing `eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml`.
+
 ---
 
 © 2025 Contributors to the Eclipse Foundation
