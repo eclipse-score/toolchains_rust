@@ -8,3 +8,23 @@ common --registry=https://bcr.bazel.build
 # ------------------------------------------------------------------------------
 build:smoke --extra_toolchains=//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 coverage:smoke --nocache_test_results
+
+# ------------------------------------------------------------------------------
+# QNX AArch64 QEMU execution config (see .github/workflows/qnx_qemu_smoke.yml)
+# ------------------------------------------------------------------------------
+build:qnx-aarch64 --incompatible_enable_cc_toolchain_resolution
+build:qnx-aarch64 --incompatible_strict_action_env
+build:qnx-aarch64 --platforms=@score_bazel_platforms//:aarch64-qnx-sdp_8.0.0-posix
+build:qnx-aarch64 --extra_toolchains=@score_qcc_aarch64_toolchain//:aarch64-qnx-sdp_8.0.0
+build:qnx-aarch64 --extra_toolchains=@score_qnx_aarch64_ifs_toolchain//:ifs-aarch64-qnx-sdp_8.0.0
+build:qnx-aarch64 --extra_toolchains=//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
+
+test:qnx-aarch64 --test_timeout=300
+test:qnx-aarch64 --run_under=@score_qnx_unit_tests//src:run_under_qnx
+test:qnx-aarch64 --test_lang_filters=cc,rust
+test:qnx-aarch64 --test_output=all
+
+# Aliases matching score_baselibs conventions
+build:score-qnx-aarch64 --config=qnx-aarch64
+test:score-qnx-aarch64 --config=qnx-aarch64
+
