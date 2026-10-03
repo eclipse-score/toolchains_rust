@@ -32,6 +32,14 @@ mod tests {
     use super::classify;
 
     #[test]
+    fn test_hello_world_smoke() {
+        println!("Hello, World from QNX AArch64!");
+        assert_eq!(classify(-5), "negative");
+        assert_eq!(classify(0), "zero");
+        assert_eq!(classify(42), "positive");
+    }
+
+    #[test]
     fn classifies_all_branches() {
         assert_eq!(classify(-5), "negative");
         assert_eq!(classify(0), "zero");
