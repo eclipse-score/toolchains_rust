@@ -223,4 +223,3 @@ imagefs.toolchain(
     type = "ifs",
 )
 use_repo(imagefs, "score_qnx_aarch64_ifs_toolchain")
-
