@@ -35,3 +35,10 @@ rust_binary(
     edition = "2021",
     deps = [":basic"],
 )
+
+rust_test(
+    name = "hello_smoke_test",
+    srcs = ["tests/hello_smoke_test.rs"],
+    data = [":hello"],
+    edition = "2021",
+)

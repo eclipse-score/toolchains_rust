@@ -37,7 +37,7 @@ jobs:
     with:
       bazel-config: "qnx-aarch64"
       bazel-target: "//examples/basic:hello"
-      bazel-test-target: "//examples/basic:basic_test"
+      bazel-test-target: "//examples/basic:hello_smoke_test"
       working-directory: "."
       extra-bazel-test-flags: "--test_output=all --test_timeout=120,600,1800,7200"
     secrets:

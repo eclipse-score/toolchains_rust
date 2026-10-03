@@ -132,13 +132,13 @@ bazel build --config=qnx-aarch64 //examples/basic:hello
 To execute the smoke test inside an emulated QNX AArch64 QEMU virtual machine:
 
 ```bash
-bazel test --config=qnx-aarch64 //examples/basic:basic_test
+bazel test --config=qnx-aarch64 //examples/basic:hello_smoke_test
 ```
 
 Under the hood:
-- Bazel cross-compiles the Rust test binary using `ferrocene_aarch64_unknown_nto_qnx800` and links with QNX SDP C/C++ libraries via `score_bazel_cpp_toolchains`.
+- Bazel cross-compiles the Rust `:hello` binary and `:hello_smoke_test` runner using `ferrocene_aarch64_unknown_nto_qnx800` and links with QNX SDP C/C++ libraries via `score_bazel_cpp_toolchains`.
 - An Image File System (`init.ifs`) boot image is generated via `score_rules_imagefs`.
-- The test runner invokes `@score_qnx_unit_tests//src:run_under_qnx`, which boots `qemu-system-aarch64` (`-machine virt -cpu max`), shares the test workspace via virtio-9p, executes the binary, and reports the result to stdout.
+- The test runner invokes `@score_qnx_unit_tests//src:run_under_qnx`, which boots `qemu-system-aarch64` (`-machine virt -cpu max`), shares the test workspace via virtio-9p, executes the `:hello` binary, and validates its captured stdout.
 
 CI executes this workflow on pull requests and pushes via `.github/workflows/qnx_qemu_smoke.yml`, reusing `eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml`.
 
