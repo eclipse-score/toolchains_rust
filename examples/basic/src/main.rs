@@ -16,7 +16,9 @@
 use basic::classify;
 
 fn main() {
+    println!("Hello, World from QNX AArch64!");
     for n in [-1, 0, 1] {
         println!("{n} is {}", classify(n));
     }
 }
+
