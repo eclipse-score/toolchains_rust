@@ -194,7 +194,7 @@ use_repo(
 # ------------------------------------------------------------------------------
 # QNX & QEMU testing dependencies (dev-only: not exposed to downstream consumers)
 # ------------------------------------------------------------------------------
-bazel_dep(name = "score_bazel_cpp_toolchains", version = "1.0.4", dev_dependency = True)
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "1.0.5", dev_dependency = True)
 bazel_dep(name = "score_rules_imagefs", version = "0.1.0", dev_dependency = True)
 bazel_dep(name = "score_qnx_unit_tests", version = "0.2.0", dev_dependency = True)
 
