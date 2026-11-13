@@ -569,7 +569,7 @@
   "moduleExtensions": {
     "//extensions:ferrocene_toolchain_ext.bzl%ferrocene_rules_rust_miri_toolchain_ext": {
       "general": {
-        "bzlTransitiveDigest": "9k8SLwP4ec9xXjFivq0Kn0FradTQhcEA+j/WsLxfVPM=",
+        "bzlTransitiveDigest": "c4l1Guf+m2vzVvfP7Q1drD9rd3iUhmLDG1YDckphLdg=",
         "usagesDigest": "Z4fXKYOxqm4evxSNjaaTWD65TdzzvcsfkuFRiIbfwcc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -645,7 +645,7 @@
     },
     "//extensions:ferrocene_toolchain_ext.bzl%ferrocene_toolchain_ext": {
       "general": {
-        "bzlTransitiveDigest": "9k8SLwP4ec9xXjFivq0Kn0FradTQhcEA+j/WsLxfVPM=",
+        "bzlTransitiveDigest": "c4l1Guf+m2vzVvfP7Q1drD9rd3iUhmLDG1YDckphLdg=",
         "usagesDigest": "QxZ8/RoP2uYRNAO0RZexeD+ZIs8dRGSBGjAkewdXuvM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

@@ -1,0 +1,8 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+sh_test(
+    name = "ferrocene_toolchain_ext_test",
+    size = "small",
+    srcs = ["ferrocene_toolchain_ext_test.py"],
+    data = ["ferrocene_toolchain_ext.bzl"],
+)
