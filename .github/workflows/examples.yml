@@ -31,8 +31,8 @@ jobs:
       - name: Build examples
         run: bazel build --lockfile_mode=error --config=smoke //examples/basic/...
 
-      - name: Run example tests
-        run: bazel test --lockfile_mode=error --config=smoke //examples/basic/...
+      - name: Run example and extension tests
+        run: bazel test --lockfile_mode=error --config=smoke //examples/basic/... //extensions:ferrocene_toolchain_ext_test
 
       - name: Run example coverage
         run: bazel coverage --lockfile_mode=error --config=smoke //examples/basic:basic_test
