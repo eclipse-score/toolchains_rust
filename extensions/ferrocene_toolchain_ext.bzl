@@ -412,6 +412,11 @@ def _ferrocene_toolchain_repo_impl(ctx):
 
     ctx.file("BUILD.bazel", _render_build_content(ctx.attr, coverage_tools_block, miri_block, llvm_tools_block))
 
+    # Unchecksummed custom archives remain supported, but cannot be shared safely.
+    if ctx.attr.sha256 and hasattr(ctx, "repo_metadata"):
+        return ctx.repo_metadata(reproducible = True)
+    return None
+
 ferrocene_toolchain_repo = repository_rule(
     implementation = _ferrocene_toolchain_repo_impl,
     attrs = {
